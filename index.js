@@ -13,18 +13,58 @@ var entries = {
       address: "jsmith@megacorp.com"
     }]
   },
+  2: {
+    firstName: "Cindy",
+    lastName: "Paramount",
+    emails: [{
+      type: "home",
+      address:  "cindy@home.com"
+    }, {
+      type: "work",
+      address: "misspara@minishop.com"
+    }]
+  },
+  3: {
+    firstName: "Daliah",
+    lastName: "Carmela",
+    emails: [{
+      type: "work",
+      address: "d.money@mammoth.com"
+    }, {
+      type: "other",
+      address: "basement@loveshack.com"
+    }]
+  },
   // ...
 };
 
-app.get('/entries/:entryId', function(req, res) {
-  if (entries[Number(req.params.entryId)] === undefined) {
-    res.sendStatus(404);
+app.get('/entry/search', function(req, res) {
+  var matches = [];
+  console.log(req.query);
+  
+  for (var p in entries) {
+    if (
+      ((req.query.firstName !== undefined) && (entries[p].firstName.toLowerCase().indexOf((req.query.firstName).toLowerCase()) !== -1)) || 
+      ((req.query.lastName !== undefined) && (entries[p].lastName.toLowerCase().indexOf((req.query.lastName).toLowerCase()) !== -1))
+      ) {
+      matches.push(entries[p].firstName + ' ' + entries[p].lastName);
+    }
+    else if (req.query.emails) {
+      entries[p].emails.forEach(function(obj){
+        if (obj.address.toLowerCase().indexOf((req.query.emails).toLowerCase()) !== -1) {
+          matches.push(entries[p].firstName + ' ' + entries[p].lastName);
+        }
+      });
+    }
+
+  }
+  if (matches.length > 0){
+  res.send("The following entries contain a match: " + matches);
   }
   else {
-    res.send(entries[Number(req.params.entryId)]);
+    res.send("Could not find any matches");
   }
 });
-
 
 
 /* YOU DON'T HAVE TO CHANGE ANYTHING BELOW THIS LINE :) */

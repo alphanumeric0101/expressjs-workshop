@@ -9,6 +9,11 @@ app.get('/hello', function (req, res) {
   res.send('<html><head><title>Greetings!</title></head><body><h1>Hello World!</h1></body></html>');
 });
 
+app.get('/hello/:firstname', function (req, res) {
+  res.send('<h1>Hello ' + req.params.firstname +'!</h1>');
+  //console.log(req.params);
+});
+
 
 
 /* YOU DON'T HAVE TO CHANGE ANYTHING BELOW THIS LINE :) */
